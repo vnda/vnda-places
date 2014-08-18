@@ -4,7 +4,7 @@ class PlacesController < ApplicationController
   def index
     respond_to do |format|
       format.html { @shops = Shop.all }
-      format.json { render(json: @shop.places.select_for_serialization) }
+      format.json { render(json: @shop.places.select_for_serialization, callback: params[:callback]) }
     end
   end
 
