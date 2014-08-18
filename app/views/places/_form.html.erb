@@ -1,0 +1,71 @@
+<%= form_for(@place) do |f| %>
+  <% if @place.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@place.errors.count, "error") %> prohibited this place from being saved:</h2>
+
+      <ul>
+      <% @place.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <%= form_field f, :shop_id do |m| %>
+    <%= f.select m, Shop.pluck(:name, :id), prompt: true %>
+  <% end %>
+  <%= form_field f, :name %>
+  <%= form_field f, :state_id do |m| %>
+    <%= f.select m, State.pluck(:name, :id), prompt: true %>
+  <% end %>
+  <%= form_field f, :address_line_1 %>
+  <%= form_field f, :address_line_2 %>
+  <%= form_field f, :city %>
+  <%= form_field f, :district %>
+  <%= form_field f, :postal_code %>
+  <%= form_field f, :main_phone %>
+  <%= form_field f, :alt_phone %>
+  <%= form_field f, :mobile_phone %>
+  <%= form_field f, :fax %>
+  <%= form_field f, :home_page %>
+  <%= form_field f, :lat %>
+  <%= form_field f, :lon %>
+  <%= form_field f, :description %>
+  <%= form_field f, :email %>
+  <%= form_field f, :only_cash do |m| %><%= f.check_box m %><% end %>
+  <%= form_field f, :images do |m| %>
+    <% (@place.send(m) || []).each do |i| %>
+      <%= text_field_tag "place[#{m}][]", i %>
+    <% end %>
+    <%= tag :input, type: :button, value: ?+, data: { add: text_field_tag("place[#{m}][]").to_str } %>
+  <% end %>
+  <%= form_field f, :categories do |m| %>
+    <% (@place.send(m) || []).each do |i| %>
+      <%= text_field_tag "place[#{m}][]", i %>
+    <% end %>
+    <%= tag :input, type: :button, value: ?+, data: { add: text_field_tag("place[#{m}][]").to_str } %>
+  <% end %>
+  <div class="field">
+    <%= f.label :opening_hours %>
+    <div class="control">
+      <table>
+        <% @place.build_opening_hours %>
+        <%= f.fields_for :opening_hours, @place.opening_hours.sort_by(&:week_day) do |fo| %>
+          <tr>
+            <td>
+              <%= fo.hidden_field :week_day %>
+              <%= I18n.t(:'date.day_names')[fo.object.week_day] %>
+            </td>
+            <td><%= fo.text_field :open, placeholder: 'HH:MM', style: 'width: 100px;',
+                                  value: fo.object.open.try(:strftime, '%H:%M') %></td>
+            <td><%= fo.text_field :close, placeholder: 'HH:MM', style: 'width: 100px;',
+                                  value: fo.object.close.try(:strftime, '%H:%M') %></td>
+          </tr>
+        <% end %>
+      </table>
+    </div>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

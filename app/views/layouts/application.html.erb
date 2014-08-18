@@ -2,12 +2,49 @@
 <html>
 <head>
   <title>Places</title>
-  <%= stylesheet_link_tag    'application', media: 'all' %>
+  <%= stylesheet_link_tag 'scaffold.css', media: 'all' %>
+  <%= javascript_include_tag '//code.jquery.com/jquery-2.1.1.min.js',
+                             'jquery_ujs.js' %>
+
   <%= csrf_meta_tags %>
+  <style>
+    body { width: 940px; margin: 0 auto; }
+    td, th { padding: 5px; }
+    td:first-child, th:first-child { padding-left: 0; }
+    th { text-align: left }
+    .control input[type=text],
+    .control select {
+      display: block;
+      width: 350px;
+      font-size: 14px;
+      line-height: 20px;
+    }
+    .control input[type=checkbox] { height: 24px; }
+    label {
+      display: inline-block;
+      width: 200px;
+      text-align: right;
+      padding-right: 20px;
+      line-height: 30px;
+      vertical-align: top;
+    }
+    .control { display: inline-block; }
+  </style>
 </head>
 <body>
 
+<p id="notice"><%= notice %></p>
 <%= yield %>
 
+<script>
+var buttons = document.querySelectorAll('[data-add]');
+for (var i =0 ; i < buttons.length; i++) {
+  buttons[i].onclick = function () {
+    var input = document.createElement('div');
+    input.innerHTML = this.dataset.add;
+    this.parentElement.insertBefore(input, this);
+  }
+}
+</script>
 </body>
 </html>

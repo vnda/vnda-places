@@ -1,0 +1,29 @@
+<h1>Listing places</h1>
+
+<% @shops.each do |shop| %>
+  <h3>
+    <%= shop.name %> (<%= shop.token %>)
+    <small><%= link_to 'Destroy', shop, method: :delete, data: { confirm: 'Are you sure?' } %></small>
+  </h3>
+  <table>
+    <tbody>
+      <% shop.places.each do |place| %>
+        <tr>
+          <td><%= place.name %></td>
+          <td><%= place.city %></td>
+          <td><%= place.state.name %></td>
+          <td><%= link_to 'Edit', edit_place_path(place) %></td>
+          <td><%= link_to 'Destroy', place, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>
+
+<hr />
+
+<%= form_for Shop.new do |f| %>
+  <%= link_to 'New Place', new_place_path %> |
+  <%= f.text_field :name, placeholder: 'New Shop' %>
+  <%= f.submit %>
+<% end %>
