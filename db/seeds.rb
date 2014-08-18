@@ -27,3 +27,25 @@ State.create!([
   { uf: 'SP', name: "São Paulo" },
   { uf: 'TO', name: "Tocantins" },
 ])
+
+if ENV['SAMPLE_DATA'] == '1'
+  Shop.create!(name: 'BodyStore').places.create!({
+    name: 'Barra Shopping Sul',
+    address_line_1: 'Av. Diário de Notícias, 300',
+    address_line_2: 'Loja 1077, Piso Jockey',
+    city: 'Porto Alegre',
+    district: 'Cristal',
+    postal_code: '90810-080',
+    main_phone: '(51) 3028-1092',
+    home_page: 'www.bodystore.com.br',
+    lat: -30.083447,
+    lon: -51.246942,
+    images: [
+      'https://fbcdn-profile-a.akamaihd.net/hprofile-ak-snc4/276522_161635053886727_290275592_n.jpg'
+    ],
+    description: 'Empório Body Store',
+    email: 'bodystorebarrasul@emporiobodystore.com.br',
+    categories: ['Cosmetics Store', 'Other'],
+    state: State.uf!(:RS),
+  })
+end

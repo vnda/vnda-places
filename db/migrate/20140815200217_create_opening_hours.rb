@@ -3,7 +3,7 @@ class CreateOpeningHours < ActiveRecord::Migration
     create_table :opening_hours do |t|
       t.references :place
       t.foreign_key :places, dependent: :delete
-      t.integer :week_day
+      t.integer :week_day, null: false
       t.time :open, null: false
       t.time :close, null: false
 

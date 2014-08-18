@@ -11,14 +11,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140815200217) do
+ActiveRecord::Schema.define(version: 20140818133709) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "opening_hours", force: true do |t|
     t.integer "place_id"
-    t.integer "week_day"
+    t.integer "week_day", null: false
     t.time    "open",     null: false
     t.time    "close",    null: false
   end
@@ -47,7 +47,15 @@ ActiveRecord::Schema.define(version: 20140815200217) do
     t.integer  "state_id",                                   null: false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "shop_id",                                    null: false
   end
+
+  create_table "shops", force: true do |t|
+    t.string "name",             null: false
+    t.string "token", limit: 32, null: false
+  end
+
+  add_index "shops", ["token"], name: "index_shops_on_token", unique: true, using: :btree
 
   create_table "states", force: true do |t|
     t.string "uf",   limit: 2,  null: false
@@ -56,6 +64,7 @@ ActiveRecord::Schema.define(version: 20140815200217) do
 
   add_foreign_key "opening_hours", "places", name: "opening_hours_place_id_fk", dependent: :delete
 
+  add_foreign_key "places", "shops", name: "places_shop_id_fk"
   add_foreign_key "places", "states", name: "places_state_id_fk"
 
 end
