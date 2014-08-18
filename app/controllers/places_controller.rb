@@ -4,7 +4,7 @@ class PlacesController < ApplicationController
   def index
     respond_to do |format|
       format.html { @shops = Shop.all }
-      format.json { render(json: @shop.places.select_for_serialization, callback: params[:callback]) }
+      format.js { render(json: @shop.places.select_for_serialization, callback: params[:callback]) }
     end
   end
 
@@ -57,7 +57,7 @@ class PlacesController < ApplicationController
   private
 
   def authenticate
-    if params[:format] == 'json'
+    if params[:format] == 'js'
       @shop = Shop.find_by!(token: params[:token])
     else
       authenticate_or_request_with_http_basic { |u, p| u == ENV["HTTP_USER"] && p == ENV["HTTP_PASSWORD"] }
