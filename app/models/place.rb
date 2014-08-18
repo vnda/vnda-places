@@ -1,6 +1,6 @@
 class Place < ActiveRecord::Base
-  validates :name, :address_line_1, :city, :postal_code, :main_phone,
-            :categories, :state_id, :shop_id, presence: true
+  validates :name, :address_line_1, :city, :postal_code, :categories, :state_id,
+            :shop_id, presence: true
   belongs_to :shop
   belongs_to :state
   has_many :opening_hours

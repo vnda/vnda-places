@@ -33,13 +33,19 @@
   <%= form_field f, :description %>
   <%= form_field f, :email %>
   <%= form_field f, :only_cash do |m| %><%= f.check_box m %><% end %>
+  <%= form_field f, :categories do |m| %>
+    <% (@place.send(m) || []).each do |i| %>
+      <%= text_field_tag "place[#{m}][]", i %>
+    <% end %>
+    <%= tag :input, type: :button, value: ?+, data: { add: text_field_tag("place[#{m}][]").to_str } %>
+  <% end %>
   <%= form_field f, :images do |m| %>
     <% (@place.send(m) || []).each do |i| %>
       <%= text_field_tag "place[#{m}][]", i %>
     <% end %>
     <%= tag :input, type: :button, value: ?+, data: { add: text_field_tag("place[#{m}][]").to_str } %>
   <% end %>
-  <%= form_field f, :categories do |m| %>
+  <%= form_field f, :videos do |m| %>
     <% (@place.send(m) || []).each do |i| %>
       <%= text_field_tag "place[#{m}][]", i %>
     <% end %>
