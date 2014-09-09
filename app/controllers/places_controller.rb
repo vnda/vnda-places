@@ -3,10 +3,18 @@ class PlacesController < ApplicationController
   respond_to :json, :html, :js
 
   def index
+    @shop ||= Shop.all
+    places = @shop.places
+
+    if params[:o].present?
+      params[:o] = params[:o].sub("state", "state_id")
+      places = places.order(params[:o])
+    end
+
     respond_to do |format|
-      format.html { @shops = Shop.all }
-      format.js { render(json: @shop.places.select_for_serialization, callback: params[:callback]) }
-      format.json { respond_with(@shop.places.select_for_serialization) }
+      format.html { @shops }
+      format.js { render(json: places.select_for_serialization, callback: params[:callback]) }
+      format.json { respond_with(places.select_for_serialization) }
     end
   end
 
