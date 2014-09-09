@@ -86,10 +86,9 @@ class PlacesController < ApplicationController
   private
 
   def authenticate
-    #return true if Rails.env == "development"
-    if store_host = env["SERVER_NAME"]
-      @shop = Shop.find_by!(name: store_host)
-    elsif params[:format] == 'js'
+    return true if @shop = Shop.find_by(host: env["SERVER_NAME"])
+
+    if params[:format] == 'js'
       @shop = Shop.find_by!(token: params[:token])
     else
       authenticate_or_request_with_http_basic { |u, p| u == 'ENV["HTTP_USER"]' && p == ENV["HTTP_PASSWORD"] }
