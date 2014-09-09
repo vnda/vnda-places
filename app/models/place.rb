@@ -34,7 +34,7 @@ class Place < ActiveRecord::Base
       .slice(:id, :name, :address_line_1, :address_line_2, :alt_phone,
              :categories, :city, :description, :district, :email, :fax,
              :home_page, :images, :lat, :lon, :main_phone, :mobile_phone, :name,
-             :only_cash, :postal_code)
+              :videos, :only_cash, :postal_code)
       .merge(state: state.uf)
   end
 

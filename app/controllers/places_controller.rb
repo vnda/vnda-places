@@ -70,7 +70,7 @@ class PlacesController < ApplicationController
     ps = params.require(:place).permit(:name, :state_id, :address_line_1,
       :address_line_2, :city, :district, :postal_code, :main_phone, :alt_phone,
       :mobile_phone, :fax, :home_page, :lat, :lon, :description, :email,
-      :shop_id, :only_cash, images: [], categories: [],
+      :shop_id, :only_cash, images: [], categories: [], videos: [],
       opening_hours_attributes: [:week_day, :open, :close])
     ps.fetch(:images, []).reject!(&:blank?)
     ps.fetch(:categories, []).reject!(&:blank?)
