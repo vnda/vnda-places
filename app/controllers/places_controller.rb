@@ -3,10 +3,12 @@ class PlacesController < ApplicationController
   respond_to :json, :html, :js
 
   def index
-    if @shop && params[:o].present?
+    if @shop
       places = @shop.places
-      params[:o] = params[:o].sub("state", "state_id")
-      places = places.order(params[:o])
+      if params[:o].present?
+        params[:o] = params[:o].sub("state", "state_id")
+        places = places.order(params[:o])
+      end
     end
 
     respond_to do |format|
