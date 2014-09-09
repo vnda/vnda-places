@@ -23,10 +23,7 @@ class PlacesController < ApplicationController
   end
 
   def create
-    p = place_params
-    p.merge!(shop_id: Shop.find_by!(host: place_params[:shop_host]).id) if place_params[:shop_host].present?
-    p.delete(:shop_host)
-    @place = Place.new(p)
+    @place = Place.new(place_params)
 
     if @place.save
       respond_to do |format|
@@ -73,10 +70,16 @@ class PlacesController < ApplicationController
     ps = params.require(:place).permit(:name, :state_id, :address_line_1,
       :address_line_2, :city, :district, :postal_code, :main_phone, :alt_phone,
       :mobile_phone, :fax, :home_page, :lat, :lon, :description, :email,
-      :shop_id, :only_cash, :shop_host, images: [], categories: [],
+      :shop_id, :only_cash, images: [], categories: [],
       opening_hours_attributes: [:week_day, :open, :close])
     ps.fetch(:images, []).reject!(&:blank?)
     ps.fetch(:categories, []).reject!(&:blank?)
+
+    if params[:place][:shop_host].present?
+      ps.merge!(shop_id: Shop.find_by!(host: params[:place][:shop_host]).id)
+      ps.delete(:shop_host)
+    end
+
     ps
   end
 
