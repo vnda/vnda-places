@@ -99,7 +99,7 @@ class PlacesController < ApplicationController
     if params[:format] == 'js'
       @shop = Shop.find_by!(token: params[:token])
     else
-      authenticate_or_request_with_http_basic { |u, p| u == 'ENV["HTTP_USER"]' && p == ENV["HTTP_PASSWORD"] }
+      authenticate_or_request_with_http_basic { |u, p| u == ENV["HTTP_USER"] && p == ENV["HTTP_PASSWORD"] }
     end
   end
 end
