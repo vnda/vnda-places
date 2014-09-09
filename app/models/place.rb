@@ -36,6 +36,7 @@ class Place < ActiveRecord::Base
              :home_page, :images, :lat, :lon, :main_phone, :mobile_phone, :name,
               :videos, :only_cash, :postal_code)
       .merge(state: state.uf)
+      .merge(opening_hours: opening_hours)
   end
 
   def self.select_for_serialization
