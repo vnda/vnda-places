@@ -3,16 +3,14 @@ class PlacesController < ApplicationController
   respond_to :json, :html, :js
 
   def index
-    @shop ||= Shop.all
-    places = @shop.places
-
-    if params[:o].present?
+    if @shop && params[:o].present?
+      places = @shop.places
       params[:o] = params[:o].sub("state", "state_id")
       places = places.order(params[:o])
     end
 
     respond_to do |format|
-      format.html { @shops }
+      format.html { @shops = Shop.all }
       format.js { render(json: places.select_for_serialization, callback: params[:callback]) }
       format.json { respond_with(places.select_for_serialization) }
     end
@@ -99,7 +97,7 @@ class PlacesController < ApplicationController
     if params[:format] == 'js'
       @shop = Shop.find_by!(token: params[:token])
     else
-      authenticate_or_request_with_http_basic { |u, p| u == ENV["HTTP_USER"] && p == ENV["HTTP_PASSWORD"] }
+      authenticate_or_request_with_http_basic { |u, p| u == ENV['HTTP_USER'] && p == ENV['HTTP_PASSWORD'] }
     end
   end
 end
