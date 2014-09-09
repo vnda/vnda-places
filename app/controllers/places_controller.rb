@@ -1,11 +1,17 @@
 class PlacesController < ApplicationController
   before_filter :authenticate
+  respond_to :json, :html, :js
 
   def index
     respond_to do |format|
       format.html { @shops = Shop.all }
       format.js { render(json: @shop.places.select_for_serialization, callback: params[:callback]) }
+      format.json { respond_with(@shop.places.select_for_serialization) }
     end
+  end
+
+  def show
+    respond_with(Place.find(params[:id]))
   end
 
   def new
@@ -17,27 +23,47 @@ class PlacesController < ApplicationController
   end
 
   def create
-    @place = Place.new(place_params)
+    p = place_params
+    p.merge!(shop_id: Shop.find_by!(host: place_params[:shop_host]).id) if place_params[:shop_host].present?
+    p.delete(:shop_host)
+    @place = Place.new(p)
 
     if @place.save
-      redirect_to edit_place_path(@place), notice: 'Place was successfully created.'
+      respond_to do |format|
+        format.html { redirect_to edit_place_path(@place), notice: 'Place was successfully created.' }
+        format.json { respond_with(@place) }
+      end
     else
-      render :new
+      respond_to do |format|
+        format.html { render :new }
+        format.json { respond_with(@place) }
+      end
     end
   end
 
   def update
     @place = Place.find(params[:id])
     if @place.update(place_params)
-      redirect_to edit_place_path(@place), notice: 'Place was successfully updated.'
+      respond_to do |format|
+        format.html {redirect_to edit_place_path(@place), notice: 'Place was successfully updated.' }
+        format.json { respond_with(@place) }
+      end
     else
-      render :edit
+      respond_to do |format|
+        format.html { render :edit }
+        format.json { respond_with(@place) }
+      end
     end
   end
 
   def destroy
-    Place.find(params[:id]).destroy!
-    redirect_to places_url, notice: 'Place was successfully destroyed.'
+    place = Place.find(params[:id])
+    place.destroy!
+
+    respond_to do |format|
+        format.html { redirect_to places_url, notice: 'Place was successfully destroyed.' }
+        format.json { respond_with(place) }
+      end
   end
 
   private
@@ -47,7 +73,7 @@ class PlacesController < ApplicationController
     ps = params.require(:place).permit(:name, :state_id, :address_line_1,
       :address_line_2, :city, :district, :postal_code, :main_phone, :alt_phone,
       :mobile_phone, :fax, :home_page, :lat, :lon, :description, :email,
-      :shop_id, :only_cash, images: [], categories: [],
+      :shop_id, :only_cash, :shop_host, images: [], categories: [],
       opening_hours_attributes: [:week_day, :open, :close])
     ps.fetch(:images, []).reject!(&:blank?)
     ps.fetch(:categories, []).reject!(&:blank?)
@@ -57,10 +83,13 @@ class PlacesController < ApplicationController
   private
 
   def authenticate
-    if params[:format] == 'js'
+    #return true if Rails.env == "development"
+    if store_host = env["SERVER_NAME"]
+      @shop = Shop.find_by!(name: store_host)
+    elsif params[:format] == 'js'
       @shop = Shop.find_by!(token: params[:token])
     else
-      authenticate_or_request_with_http_basic { |u, p| u == ENV["HTTP_USER"] && p == ENV["HTTP_PASSWORD"] }
+      authenticate_or_request_with_http_basic { |u, p| u == 'ENV["HTTP_USER"]' && p == ENV["HTTP_PASSWORD"] }
     end
   end
 end
