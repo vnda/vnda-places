@@ -94,7 +94,7 @@ class PlacesController < ApplicationController
   private
 
   def authenticate
-    return true if @shop = Shop.find_by(host: (env['HTTP_X_STORE'] || '').split(':').first)
+    return true if @shop = Shop.find_by(host: (env['HTTP_X_STORE']).split(':').first) && env['HTTP_X_STORE'].present?
 
     if params[:format] == 'js'
       @shop = Shop.find_by!(token: params[:token])
