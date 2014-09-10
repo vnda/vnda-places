@@ -32,6 +32,7 @@
   <%= form_field f, :lon %>
   <%= form_field f, :description %>
   <%= form_field f, :email %>
+  <%= form_field f, :marker_url %>
   <%= form_field f, :only_cash do |m| %><%= f.check_box m %><% end %>
   <%= form_field f, :categories do |m| %>
     <% (@place.send(m) || []).each do |i| %>

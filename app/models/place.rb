@@ -32,7 +32,7 @@ class Place < ActiveRecord::Base
   def serializable_hash(*)
     hash = attributes.symbolize_keys
       .slice(:id, :name, :address_line_1, :address_line_2, :alt_phone,
-             :categories, :city, :description, :district, :email, :fax,
+             :categories, :city, :description, :district, :email, :fax, :marker_url,
              :home_page, :images, :lat, :lon, :main_phone, :mobile_phone, :name,
               :videos, :only_cash, :postal_code)
       .merge(state: state.uf)

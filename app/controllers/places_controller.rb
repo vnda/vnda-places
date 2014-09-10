@@ -77,7 +77,7 @@ class PlacesController < ApplicationController
   def place_params
     ps = params.require(:place).permit(:name, :state_id, :address_line_1,
       :address_line_2, :city, :district, :postal_code, :main_phone, :alt_phone,
-      :mobile_phone, :fax, :home_page, :lat, :lon, :description, :email,
+      :mobile_phone, :fax, :home_page, :lat, :lon, :description, :email, :marker_url,
       :shop_id, :only_cash, images: [], categories: [], videos: [],
       opening_hours_attributes: [:week_day, :open, :close])
     ps.fetch(:images, []).reject!(&:blank?)
@@ -94,7 +94,6 @@ class PlacesController < ApplicationController
   private
 
   def authenticate
-    puts ">>>> #{(env['HTTP_X_STORE'] || "unknown-host")}"
     return true if @shop = Shop.find_by(host: (env['HTTP_X_STORE'] || "unknown-host").split(':').first)
 
     if params[:format] == 'js'
