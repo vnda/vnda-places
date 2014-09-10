@@ -94,8 +94,8 @@ class PlacesController < ApplicationController
   private
 
   def authenticate
-    puts ">>>> #{env['HTTP_X_STORE']}"
-    #return true if @shop = Shop.find_by(host: (env['HTTP_X_STORE'] || "unknown-host").split(':').first)
+    puts ">>>> #{(env['HTTP_X_STORE'] || "unknown-host")}"
+    return true if @shop = Shop.find_by(host: (env['HTTP_X_STORE'] || "unknown-host").split(':').first)
 
     if params[:format] == 'js'
       @shop = Shop.find_by!(token: params[:token])
