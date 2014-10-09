@@ -1,7 +1,7 @@
 
 class ShopsController < ApplicationController
   def create
-    @shop = Shop.new(params.require(:shop).permit(:name))
+    @shop = Shop.new(shop_params)
     if @shop.save
       redirect_to places_path
     else
@@ -12,5 +12,9 @@ class ShopsController < ApplicationController
   def destroy
     Shop.find(params[:id]).destroy!
     redirect_to places_path
+  end
+
+  def shop_params
+    params.require(:shop).permit(:name, :host)
   end
 end

@@ -2,7 +2,7 @@
 
 <% @shops.each do |shop| %>
   <h3>
-    <%= shop.name %> (<%= shop.token %>)
+    <%= shop.name %> (<%= shop.token %>) Host: <%= shop.host %>
     <small><%= link_to 'Destroy', shop, method: :delete, data: { confirm: 'Are you sure?' } %></small>
   </h3>
   <table>
@@ -25,5 +25,6 @@
 <%= form_for Shop.new do |f| %>
   <%= link_to 'New Place', new_place_path %> |
   <%= f.text_field :name, placeholder: 'New Shop' %>
+  <%= f.text_field :host, placeholder: 'Shop' %>
   <%= f.submit %>
 <% end %>
